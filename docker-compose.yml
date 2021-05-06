@@ -1,0 +1,10 @@
+version: "3.0"
+
+services:
+  app:
+    image: jrottenberg/ffmpeg
+    env_file:
+      - ./.env
+    command:  -loop 1 -i /config/radio.jpg -thread_queue_size 20480 -i ${STREAM} -framerate 30 -r 30 -acodec aac -strict -2 -c:v libx264 -strict experimental -b:a 128k -pix_fmt yuvj444p -x264-params keyint=60 -b:v 2048k -minrate 1024k -maxrate 4000k -bufsize 4000k -f flv rtmps://live-upload.instagram.com:443/rtmp/${KEY}
+    volumes:
+      - ./:/config
